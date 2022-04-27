@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import pkg from '../package.json';
+import 'dotenv/config';
 
 import appRoutes from './routes/app.routes';
 import authRoutes from './routes/auth.routes';
@@ -9,6 +10,7 @@ import userRoutes from './routes/user.routes';
 const app = express();
 
 app.set('pkg', pkg);
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(morgan('dev'));
 app.get('/', (req, res) => {

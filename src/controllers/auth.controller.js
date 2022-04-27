@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config';
 
 export const register = async (req, res) => {
-  const { email, password, roles } = req.body;
+  const { email, password } = req.body;
   const newUser = new User({
     email,
     password: await bcrypt.hash(password, 10),
@@ -19,7 +19,7 @@ export const register = async (req, res) => {
 };
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  const userFound = await User.findOne({ email: email }).populate('roles');
+  const userFound = await User.findOne({ email: email });
 
   if (!userFound) return res.status(400).json({ message: 'User not found' });
 
@@ -31,10 +31,6 @@ export const login = async (req, res) => {
   const token = jwt.sign({ id: userFound._id }, config.SECRET, {
     expiresIn: 86400,
   });
-  res.json({ token: token });
-};
 
-export const user = async (req, res) => {
-  const listUsers = await User.find();
-  res.json(listUsers);
+  res.json({ token: token });
 };
